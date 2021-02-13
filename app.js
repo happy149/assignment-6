@@ -33,7 +33,17 @@ const getImages = (query) => {
     .then(response => response.json())
     .then(data => showImages(data.hits))
     .catch(err => console.log(err))
+    toggleSpinner ();
 }
+
+
+document.getElementById("search")
+.addEventListener("keypress",function(event){
+  if(event.key == 'Enter'){
+    document.getElementById("search-btn").click();
+  }
+});
+
 
 let slideIndex = 0;
 const selectItem = (event, img) => {
@@ -64,6 +74,7 @@ const createSlider = () => {
   `;
 
   sliderContainer.appendChild(prevNext)
+  toggleSpinner ();
   document.querySelector('.main').style.display = 'block';
   // hide image aria
   imagesArea.style.display = 'none';
@@ -123,4 +134,10 @@ searchBtn.addEventListener('click', function () {
 
 sliderBtn.addEventListener('click', function () {
   createSlider()
-})
+});
+
+//spinner
+const toggleSpinner = () => {
+  const spinner = document.getElementById("loading-spinner");
+  spinner.classList.toggle('d-none');
+}
