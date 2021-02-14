@@ -1,4 +1,5 @@
 const imagesArea = document.querySelector('.images');
+const noImagesArea = document.querySelector('.no-images');
 const gallery = document.querySelector('.gallery');
 const galleryHeader = document.querySelector('.gallery-header');
 const searchBtn = document.getElementById('search-btn');
@@ -15,16 +16,25 @@ const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 
 // show images 
 const showImages = (images) => {
-  imagesArea.style.display = 'block';
-  gallery.innerHTML = '';
-  // show gallery title
-  galleryHeader.style.display = 'flex';
-  images.forEach(image => {
-    let div = document.createElement('div');
-    div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
-    div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
-    gallery.appendChild(div)
-  })
+  console.log(images.length);
+  if(images.length === 0){
+    noImagesArea.style.display='block';
+    imagesArea.style.display = 'none';
+  }
+  else{
+    noImagesArea.style.display='none';
+    imagesArea.style.display = 'block';
+    gallery.innerHTML = '';
+    // show gallery title
+    galleryHeader.style.display = 'flex';
+    images.forEach(image => {
+      let div = document.createElement('div');
+      div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
+      div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
+      gallery.appendChild(div)
+    })
+  }
+  
 
   toggleSpinner();
 
@@ -90,6 +100,7 @@ const createSlider = () => {
   imagesArea.style.display = 'none';
   const duration = document.getElementById('duration').value || 1000;
   const navigation_dot = document.getElementById('navigation-dot');
+  navigation_dot.innerHTML = '';
   if(duration < 0){
       alert('Duration can not be negative.')
       return;
@@ -101,6 +112,7 @@ const createSlider = () => {
     src="${slide}"
     alt="">`;
     sliderContainer.appendChild(item);
+    // dot buttons in slider added, now also clickable
     let dot = document.createElement('span');
     dot.className = 'dot';
     dot.id='dot-' + index;
@@ -153,7 +165,7 @@ searchBtn.addEventListener('click', function () {
   const search = document.getElementById('search');
   getImages(search.value);
   toggleSpinner();
-  sliders.length = 0;
+  sliders = [];
 })
 
 sliderBtn.addEventListener('click', function () {
